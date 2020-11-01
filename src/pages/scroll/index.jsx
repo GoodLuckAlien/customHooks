@@ -1,20 +1,16 @@
-import React, { useRef, useEffect } from 'react'
-import { View, Image, Text, Swiper, SwiperItem } from '@tarojs/components'
+import React from 'react'
+import { View, Swiper, SwiperItem } from '@tarojs/components'
 
 import useScroll from '../../hooks/useScroll'
 
 import './index.less'
 
-export default function Index() {
-    const cachePostionInfo = useRef(null)
-    const scrollOptions = useScroll(cachePostionInfo, true)
-    useEffect(() => {
-        cachePostionInfo.current = document.querySelector('#box')
-    }, [])
+export default function Index() { 
+    const [scrollOptions,domRef] = useScroll()
     const { opacity, top, suctionTop } = scrollOptions
     return <View style={{ position: 'static', height: '2000px' }} >
         <View className='white' />
-        <View className='box' id='box' style={{ opacity, transform: `translateY(${top}px)` }} >
+        <View ref={domRef} className='box' style={{ opacity, transform: `translateY(${top}px)` }} >
             <Swiper
               className='swiper'
             >
