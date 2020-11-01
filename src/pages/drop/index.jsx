@@ -9,6 +9,7 @@ import './index.less'
 export default function index (){
    const [ style1 , dropRef ]= useDrapDrop()
    const [style2,dropRef2] = useDrapDrop()
+   const [style3 ,dropRef3 ] = useDrapDrop()
    return <View className='index'>
       <View 
         className='drop1' 
@@ -20,6 +21,10 @@ export default function index (){
         ref={dropRef2}
         style={{transform:`translate(${style2.x}px, ${style2.y}px)`}} 
       >drop2</View>
-      <View className='drop3' >drop3</View>
+      <View 
+        className='drop3'
+        ref={dropRef3}
+        style={{transform:`translate(${style3.x}px, ${style3.y}px)`}}
+      >drop3</View>
    </View>
 }

@@ -2,7 +2,7 @@
 import {
     useState,
     useMemo,
-    useLayoutEffect,
+    useEffect,
     useRef
   } from 'react'
   
@@ -33,14 +33,14 @@ export default function useTableRequset(query, api) {
       }
     }, [])
     /* 改变分页，重新请求数据 */
-    useLayoutEffect(() => {
+    useEffect(() => {
       fisrtRequest.current && getList({
         ...query,
         ...pageOptions
       })
     }, [pageOptions])
     /* 改变查询条件。重新请求数据 */
-    useLayoutEffect(() => {
+    useEffect(() => {
       getList({
         ...query,
         ...pageOptions,

@@ -3,7 +3,7 @@ import {
   useRef,
   useState,
   useMemo,
-  useEffect
+  useLayoutEffect
 } from 'react'
 
 /* 移动端 -> 拖拽自定义效果(不使用定位) */
@@ -11,7 +11,8 @@ function useDrapDrop() {
   /* 保存上次移动位置 */  
   const lastOffset = useRef({
       X:0,
-      Y:0
+      Y:0,
+      firstBind:false
   })  
   /* 保存left right信息 */
   const currentOffset = useRef({})
@@ -40,17 +41,17 @@ function useDrapDrop() {
         lastOffset.current.X = style.x
         lastOffset.current.Y = style.y
   },[style.x, style.y])
-  useEffect(()=>{
-     const dom = currentDom.current
-     if(dom){
-         dom.ontouchstart = ontouchstart
-         dom.ontouchmove = ontouchmove
-     }
-  },[])
-  useEffect(()=>{
+
+  useLayoutEffect(()=>{
     const dom = currentDom.current
     if(dom){
-       dom.ontouchend = ontouchend
+      /* 第一绑定之后就不需要继续绑定 */
+      if(!lastOffset.current.firstBind){
+        dom.ontouchstart = ontouchstart
+        dom.ontouchmove = ontouchmove
+        lastOffset.current.firstBind = true
+      }
+      dom.ontouchend = ontouchend
     }
   },[ontouchend])
   return [ style,currentDom ]
