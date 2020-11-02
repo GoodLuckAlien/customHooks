@@ -10,50 +10,50 @@ import {
 function useDrapDrop() {
   /* 保存上次移动位置 */  
   const lastOffset = useRef({
-      X:0,
-      Y:0,
-      firstBind:false
+      x:0, /* 当前x 值 */
+      y:0, /* 当前y 值 */
+      X:0, /* 上一次保存X值 */
+      Y:0, /* 上一次保存Y值 */
   })  
   /* 获取当前的元素实例 */
   const currentDom = useRef(null)
-  const [style, setStyle] = useState({})
+  /* 改变位置 */
+  const [, foceUpdate] = useState({})
   /* 监听开始/移动事件 */
-  const [ ontouchstart ,ontouchmove ] = useMemo(()=>{
+  const [ ontouchstart ,ontouchmove ,ontouchend ] = useMemo(()=>{
       /* 保存left right信息 */
       const currentOffset = {} 
+      /* 开始滑动 */
       const touchstart = function (e) {   
         const targetTouche = e.targetTouches[0]
         currentOffset.X = targetTouche.clientX
         currentOffset.Y = targetTouche.clientY
       }
+      /* 滑动中 */
       const touchmove = function (e){
         const targetT = e.targetTouches[0]
         let x =lastOffset.current.X  + targetT.clientX - currentOffset.X
         let y =lastOffset.current.Y  + targetT.clientY - currentOffset.Y 	
-        setStyle({
+        lastOffset.current.x = x
+        lastOffset.current.y = y
+        foceUpdate({
            x,y
         })
       }
-      return [ touchstart , touchmove ]
+      /* 监听滑动停止事件 */
+      const touchend =  () => {
+        lastOffset.current.X = lastOffset.current.x
+        lastOffset.current.Y = lastOffset.current.y
+      }
+      return [ touchstart , touchmove ,touchend]
   },[])
-  /* 监听滑动停止事件 */
-  const ontouchend = useMemo( () => () => {
-        lastOffset.current.X = style.x
-        lastOffset.current.Y = style.y
-  },[style.x, style.y])
   useLayoutEffect(()=>{
     const dom = currentDom.current
-    if(dom){
-      /* 第一绑定之后就不需要继续绑定 */
-      if(!lastOffset.current.firstBind){
-        dom.ontouchstart = ontouchstart
-        dom.ontouchmove = ontouchmove
-        lastOffset.current.firstBind = true
-      }
-      dom.ontouchend = ontouchend
-    }
-  },[ontouchend])
-  return [ style , currentDom]
+    dom.ontouchstart = ontouchstart
+    dom.ontouchmove = ontouchmove
+    dom.ontouchend = ontouchend
+  },[])
+  return [ { x:lastOffset.current.x,y:lastOffset.current.y } , currentDom]
 }
 
 export default useDrapDrop

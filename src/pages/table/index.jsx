@@ -15,7 +15,6 @@ function getList(payload){
   const query = formateQuery(payload)
   return fetch('http://127.0.0.1:7001/page/tag/list?'+ query ).then(res => res.json())
 }
-
 export default function index(){
     /* 控制表格查询条件 */
     const [ query , setQuery ] = useState({})
