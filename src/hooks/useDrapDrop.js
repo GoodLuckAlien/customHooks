@@ -14,22 +14,22 @@ function useDrapDrop() {
       Y:0,
       firstBind:false
   })  
-  /* 保存left right信息 */
-  const currentOffset = useRef({})
   /* 获取当前的元素实例 */
   const currentDom = useRef(null)
   const [style, setStyle] = useState({})
   /* 监听开始/移动事件 */
   const [ ontouchstart ,ontouchmove ] = useMemo(()=>{
-      const touchstart = function (e) {
+      /* 保存left right信息 */
+      const currentOffset = {} 
+      const touchstart = function (e) {   
         const targetTouche = e.targetTouches[0]
-        currentOffset.current.X = targetTouche.clientX
-        currentOffset.current.Y = targetTouche.clientY
+        currentOffset.X = targetTouche.clientX
+        currentOffset.Y = targetTouche.clientY
       }
       const touchmove = function (e){
         const targetT = e.targetTouches[0]
-        let x =lastOffset.current.X  + targetT.clientX - currentOffset.current.X
-        let y =lastOffset.current.Y  + targetT.clientY - currentOffset.current.Y 	
+        let x =lastOffset.current.X  + targetT.clientX - currentOffset.X
+        let y =lastOffset.current.Y  + targetT.clientY - currentOffset.Y 	
         setStyle({
            x,y
         })
@@ -41,7 +41,6 @@ function useDrapDrop() {
         lastOffset.current.X = style.x
         lastOffset.current.Y = style.y
   },[style.x, style.y])
-
   useLayoutEffect(()=>{
     const dom = currentDom.current
     if(dom){
@@ -54,7 +53,7 @@ function useDrapDrop() {
       dom.ontouchend = ontouchend
     }
   },[ontouchend])
-  return [ style,currentDom ]
+  return [ style , currentDom]
 }
 
 export default useDrapDrop

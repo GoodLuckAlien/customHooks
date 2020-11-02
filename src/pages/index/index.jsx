@@ -29,11 +29,11 @@ const menuList = [
     title:'拖拽效果(移动端)',
     path:'/pages/drop/index'
   },
-  // {
-  //   note:'useImageLoading',
-  //   title:'图片加载/加载失败',
-  //   path:'/pages/image/index'
-  // }
+  {
+    note:'useImageLoading',
+    title:'图片加载/加载失败',
+    path:'/pages/image/index'
+  }
 ]
 
 export default class Index extends Component {

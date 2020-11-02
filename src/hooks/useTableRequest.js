@@ -6,7 +6,7 @@ import {
     useRef
   } from 'react'
   
-  /* table数据更新 hooks */
+  /* table 数据更新 hooks */
 export default function useTableRequset(query, api) {
     /* 是否是第一次请求 */
     const fisrtRequest = useRef(false)
@@ -15,6 +15,7 @@ export default function useTableRequset(query, api) {
       page: 1,
       pageSize: 3
     })
+    /* 保存表格数据 */
     const [tableData, setTableData] = useState({
       list: [],
       totalCount: 0,
